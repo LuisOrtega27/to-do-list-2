@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+    
+</head>
+<body>
+
+    <h1 class="title">My Note Book</h1>
+
+    <div class="noteBook">
+    
+        <form action="#" class="newTaskForm">
+            
+            <span class="maxLength">0/255</span>
+
+            <input type="text" name="newTaskInput" id="newTaskInput" class="newTaskInput" maxlength="255">
+            <input type="submit" value="add" id="newTaskBtn" class="newTaskBtn">
+        </form>
+        
+        <nav class="listSelector">
+            <a href="#" class="tab active">To Do</a>
+            <a href="#" class="tab">Done</a>
+        </nav>
+        
+        <ul class="list toDoList active" id="toDoList"></ul>
+        
+        <ul class="list doneList" id="doneList"></ul>
+
+    </div>
+    
+</body>
+</html>
