@@ -130,6 +130,9 @@ newTaskBtn.addEventListener('click', (e)=> {
     
     
     newTaskInput.value = ''
+
+    // cambiar el valor del contador
+    maxLength.textContent = `0/255`
     
 })
 
@@ -212,9 +215,8 @@ const saveTask = (e)=>{
 
 // *********************************************** ELIMINAR TAREAS ***********************************************
 const deleteTask = (e)=>{
-
-    let id = parseInt(e.target.parentNode.id)
-
+    
+    let id = e.target.parentNode.id
 
     // seleccionar el 'contenedor' UL
     let parent = e.target.parentNode.parentNode 
@@ -232,12 +234,12 @@ const deleteTask = (e)=>{
     setTimeout(()=>{ parent.removeChild(currentNode) }, 600)
 
 
-    // eliminar el elemento del ARRAY de tareas por hacer
-
     
+    
+    // eliminar el elemento del ARRAY de tareas por hacer
     for( let index in storageList['toDoList']){
 
-        if( id === storageList['toDoList'][index].id ) {
+        if( parseInt(id) === parseInt(storageList['toDoList'][index].id) ) {
                 storageList['toDoList'].splice(index, 1)
             break;
         }
@@ -321,8 +323,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     if(window.localStorage.getItem('noteBook') === null){
         
         let listaDePrueba = {
-            'toDoList': [{id: 0, txt: 'Tarea de prueba'}],
-            'doneList': [{id: 0, txt: 'Tarea de prueba'}]
+            'toDoList': [{id: 0, txt: 'Something to do.'}],
+            'doneList': [{id: 0, txt: 'Something done.'}]
         } 
         
         listaDePrueba = JSON.stringify(listaDePrueba)
