@@ -97,21 +97,45 @@ body{
     display: block;
 }
 
-.line{
-    padding: 20px;
-    border-bottom: #000 solid 2px;
-}
-
-.list > .newLine{
-    animation:  newLine 0.9s ease;
-}
-
 .item{
+
+    display: grid;
+    grid-template-columns: 1fr repeat(2, 60px);
+    /* gap: 10px; */
     position: relative;
     cursor: pointer;
     list-style: none;
+    padding: 20px;
+    border-bottom: #000 solid 2px;
+
+    animation:  newLine 0.9s ease;
 }
-.item::after{
+
+
+.itemBtn{
+    background: none;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+.itemBtn:hover{
+    transform: scale(1.1);
+}
+.itemBtn:active{
+    transform: scale(0.9);
+}
+
+.saveBtn-active{
+    color: #28e;
+}
+
+.deleteBtn{
+    color: #e22;
+}
+
+.deleteItem::after{
     content: '';
     position: absolute;
     top: 50%;
@@ -119,18 +143,39 @@ body{
     height: 2px;
     width: 0%;
     background: #000;
-    transition: width 0.3s ease; 
+    transition: width 0.6s ease; 
+}
+    
+
+.deleteItem{
+    animation: deletingItem 0.6s ease-out 0.3s;
 }
 
-.item:hover::after{
-    width: 110%;
-}
-
-.deletingItem{
-    animation: deletingItem 0.9s ease-out;
-}
-.deletingItem::after{
+.deleteItem::after{
     animation: lineThrough 0.3s ease forwards;
+}
+
+
+
+.clearDone{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%-50%);
+    background: none;
+    border: none;
+    z-index: 1000;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.clearDone:hover{
+    transform: rotate(-25deg);
+}
+.clearDone > svg{
+    width: 100%;
+    height: 100%;
 }
 
 
