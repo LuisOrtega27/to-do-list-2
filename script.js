@@ -5,7 +5,7 @@ const lists = document.querySelectorAll('.list')
 const newTaskInput = document.querySelector('.newTaskInput')
 const newTaskBtn = document.querySelector('.newTaskBtn')
 
-const clearDoneBtn = document.querySelector('.clearDone')
+const clearDoneBtn = document.querySelector('.clearDoneBtn')
 
 let currentList = null;
 
@@ -84,8 +84,8 @@ const makeItem =  (text, index, listName)=>{
         LI_HTML.appendChild(BTN_SAVE)
         LI_HTML.appendChild(BTN_DEL)
         
-        BTN_SAVE.addEventListener('click', (e)=>saveTask(e, index))
-        BTN_DEL.addEventListener('click', (e)=>deleteTask(e, index) )
+        BTN_SAVE.addEventListener('click', (e)=>saveTask(e))
+        BTN_DEL.addEventListener('click', (e)=>deleteTask(e) )
 
     }
     
@@ -95,10 +95,10 @@ const makeItem =  (text, index, listName)=>{
 }
 
 const addNewItem =  (text, index, listName)=>{
-        
+
     const ITEM  =  makeItem(text, index, listName)
 
-    currentList = document.querySelector(`#${listName}`)
+    let currentList = document.querySelector(`#${listName}`)
     currentList.appendChild(ITEM)
 
 }
@@ -106,20 +106,23 @@ const addNewItem =  (text, index, listName)=>{
 
 newTaskBtn.addEventListener('click', (e)=> {
     
-    if (newTaskInput.value == '') return
+    let texto = newTaskInput.value
+    
+
+    if (texto == '') return
     
     e.preventDefault()
 
     let index = storageList['toDoList'].length
-    
-    addNewItem(newTaskInput.value, index, 'toDoList') 
+
+    addNewItem(texto, index, 'toDoList') 
     
     
     let toDoTab = document.querySelector('.listSelector > .tab')
     
     changeList(toDoTab, 0)
 
-    storageList['toDoList'].push(newTaskInput.value) 
+    storageList['toDoList'].push({id: index, txt: texto}) 
     
     let listToSave = JSON.stringify(storageList)
     
@@ -184,16 +187,15 @@ tabs.forEach( (tab, index) => {
 
 
 
-// *********************************************** GUARDAR TAREAS ***********************************************
-const saveTask = (e, index)=>{
-
-    console.log(e.target.parentNode.children[0])
-
-    let newText = e.target.parentNode.children[0].textContent
+// *********************************************** GUARDAR TAREA EDITADA ***********************************************
+const saveTask = (e)=>{
 
     if(!e.target.classList.value.includes('saveBtn-active')) return
+    
+    let id = e.target.parentNode.id
+    let newText = e.target.parentNode.children[0].textContent
 
-    storageList['toDoList'][index] = newText
+    storageList['toDoList'][id] = {id, txt: newText}
 
     let listToSave = JSON.stringify(storageList)
         
@@ -209,14 +211,9 @@ const saveTask = (e, index)=>{
 
 
 // *********************************************** ELIMINAR TAREAS ***********************************************
-const deleteTask = (e, index)=>{
+const deleteTask = (e)=>{
 
-
-    console.log(e.target.parentNode.id)
-    // console.log(index)
-    
-    let obj = storageList['toDoList']
-    console.log('before', obj)
+    let id = parseInt(e.target.parentNode.id)
 
 
     // seleccionar el 'contenedor' UL
@@ -236,16 +233,20 @@ const deleteTask = (e, index)=>{
 
 
     // eliminar el elemento del ARRAY de tareas por hacer
-    storageList['toDoList'].splice(index, 1)
+
+    
+    for( let index in storageList['toDoList']){
+
+        if( id === storageList['toDoList'][index].id ) {
+                storageList['toDoList'].splice(index, 1)
+            break;
+        }
+    }
+
     
     // a;adir elemento al ARRAY de tareas terminadas
-    storageList['doneList'].push(text)
+    storageList['doneList'].push({id: storageList['doneList'].length, txt:text})
 
-
-
-
-    obj = storageList['toDoList']
-    console.log('after', obj)
 
 
     // guardar el ARRAY modificado
@@ -253,10 +254,7 @@ const deleteTask = (e, index)=>{
     window.localStorage.setItem('noteBook', listToSave)
 
 
-
     addNewItem(text, storageList['doneList'].length, 'doneList')
-    
-
 
 }
 
@@ -269,9 +267,13 @@ const updateList = (storageList)=>{
     if( storageList == undefined ) return 
 
 
-    for( list in storageList){
+    for( let listName in storageList){
         
-        storageList[list].forEach( (text, index) => addNewItem(text, index, list) )
+        storageList[listName].forEach( (obj) => {            
+
+            addNewItem(obj.txt, obj.id, listName)
+            
+        } )
 
     }
 
@@ -280,23 +282,32 @@ const updateList = (storageList)=>{
 
 //  CREAR DONE LIST
 
+
+
 clearDoneBtn.addEventListener('click', ()=>{
 
+
+    
+    lists[1].childNodes.forEach((item)=>{
+        
+        item.classList.add('itemCleared')
+
+    })
+    
+    setTimeout(()=>{
+        
+        lists[1].innerHTML = null
+
+    }, 300)
+
+
+    
     storageList['doneList'].splice(0, storageList['doneList'].length)
     
     let listToSave = JSON.stringify(storageList)
     
     window.localStorage.setItem('noteBook', listToSave)
     
-
-
-    lists[1].childNodes.forEach((item)=>{
-        console.log(item)
-
-        lists[1].removeChild(item)
-    })
-        
-
     
     
 })
