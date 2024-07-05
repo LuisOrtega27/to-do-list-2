@@ -310,8 +310,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     if(window.localStorage.getItem('noteBook') === null){
         
         let listaDePrueba = {
-            'toDoList': ['Tarea de prueba'],
-            'doneList': ['Tarea de prueba']
+            'toDoList': [{id: 0, txt: 'Tarea de prueba'}],
+            'doneList': [{id: 0, txt: 'Tarea de prueba'}]
         } 
         
         listaDePrueba = JSON.stringify(listaDePrueba)
